@@ -1,19 +1,9 @@
 {
   "version": 2,
-  "name": "ai-almanac",
-  "env": {
-    "DEEPSEEK_API_KEY": {
-      "description": "Deepseek API Key",
-      "required": true
-    }
-  },
   "builds": [
     {
       "src": "api.js",
-      "use": "@vercel/node",
-      "config": {
-        "maxDuration": 30
-      }
+      "use": "@vercel/node"
     },
     {
       "src": "public/**",
@@ -22,38 +12,12 @@
   ],
   "routes": [
     {
-      "src": "/api/.*",
-      "dest": "api.js",
-      "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
-    },
-    {
-      "src": "/health",
+      "src": "/api/(.*)",
       "dest": "api.js"
     },
     {
       "src": "/(.*)",
-      "dest": "public/$1",
-      "status": 200
-    }
-  ],
-  "headers": [
-    {
-      "source": "/public/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=3600, s-maxage=3600"
-        }
-      ]
-    },
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
-        }
-      ]
+      "dest": "public/$1"
     }
   ]
 }
