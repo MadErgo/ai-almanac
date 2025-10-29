@@ -11,7 +11,12 @@ const openai = new OpenAI({
   baseURL: 'https://api.deepseek.com',
 });
 
-app.use(cors());
+app.use(cors({
+  origin: ['https://ai-almanac.vercel.app', 'http://localhost:3000'],
+  credentials: true,
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type']
+}));
 app.use(express.json());
 
 // 计算五行和阴阳
@@ -54,7 +59,7 @@ function mapBirthTimeToContext(timeSlot) {
   return mapping[timeSlot] || mapping['unknown'];
 }
 
-// 使用Claude生成签文
+// 使用Deepseek生成签文
 async function generateAlmanac(input) {
   const { name, nickname, birthdate, birthTime, mood, language } = input;
   const elementInfo = calculateElementAndPolarity(birthdate);
