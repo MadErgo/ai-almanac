@@ -1,13 +1,14 @@
 import express from 'express';
 import cors from 'cors';
-import Anthropic from '@anthropic-ai/sdk';
+import OpenAI from 'openai';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 const app = express();
-const anthropic = new Anthropic({
-  apiKey: process.env.CLAUDE_API_KEY,
+const openai = new OpenAI({
+  apiKey: process.env.DEEPSEEK_API_KEY,
+  baseURL: 'https://api.deepseek.com',
 });
 
 app.use(cors());
@@ -134,8 +135,8 @@ Important notes:
   `;
 
   try {
-    const message = await anthropic.messages.create({
-      model: 'claude-3-5-sonnet-20241022',
+    const message = await openai.chat.completions.create({
+      model: 'deepseek-chat',
       max_tokens: 1024,
       messages: [
         {
@@ -146,7 +147,7 @@ Important notes:
     });
 
     // 提取JSON响应
-    const responseText = message.content[0].type === 'text' ? message.content[0].text : '';
+    const responseText = message.choices[0].message.content || '';
     
     // 尝试从响应中提取JSON
     const jsonMatch = responseText.match(/\{[\s\S]*\}/);
@@ -162,7 +163,7 @@ Important notes:
       wisdom: result.wisdom
     };
   } catch (error) {
-    console.error('Claude API Error:', error);
+    console.error('Deepseek API Error:', error);
     // 返回备用数据
     return {
       element,
