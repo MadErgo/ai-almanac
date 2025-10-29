@@ -747,7 +747,7 @@
     // 检查API连接
     async function checkApiStatus() {
       try {
-        const response = await fetch(`${API_BASE_URL}/health`, { timeout: 5000 });
+        const response = await fetch(`${API_BASE_URL}/api/health`, { timeout: 5000 });
         apiConnected = response.ok;
       } catch (error) {
         apiConnected = false;
